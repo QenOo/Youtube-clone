@@ -4,6 +4,7 @@ import {ReactComponent as SearchIcon} from '../assets/img/search.svg'
 
 class Navbar extends Component {
     render () {
+        const {handelChange, keyWord, handelClick} = this.props
         return (
             <div className="navbar">
                 <div className="container">
@@ -12,8 +13,8 @@ class Navbar extends Component {
                             <Logo />
                         </div>
                         <div className="search">
-                            <input />
-                            <button><SearchIcon /></button>
+                            <input value={keyWord} onChange={handelChange} />
+                            <button onClick={handelClick}> <SearchIcon /> </button>
                         </div>
                     </div>
                 </div>
