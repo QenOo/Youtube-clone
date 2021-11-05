@@ -3,28 +3,46 @@ import './assets/css/main.css';
 import Navbar from './components/Navbar';
 import axios from 'axios';
 import Video from './components/videoCard';
+import {onSearch} from './Api';
 
 class App extends Component {
     state = {
-        videos: []
+        videos: [],
+        keyWord: 'AlAhly',
+        resultsSearchNumber: null,
     }
 
-    componentDidMount() {
-        axios.get(`https://www.googleapis.com/youtube/v3/search?key=AIzaSyDP5y9xSN9lmKT4FZrmebkSL1W-eK8lIvk&type=video&q=spong&part=snippet&maxResults=20`)
-            .then(res => {
+    // Get the Api
+    componentDidMount = () => {
+        onSearch(this.state.keyWord).then( res => {
                 const videos = res.data.items;
-                console.log(videos)
-                this.setState({ videos });
+                const resultsSearchNumber = res.data.pageInfo.totalResults;
+                this.setState({ videos, resultsSearchNumber });
             })
     }
 
+    // Handel change in input
+    handelChange = (e) => {
+        this.setState({keyWord: e.target.value});
+    }
+
+
+    handelClick = () => {
+        onSearch(this.state.keyWord).then( res => {
+            const videos = res.data.items;
+            const resultsSearchNumber = res.data.pageInfo.totalResults;
+            this.setState({ videos, resultsSearchNumber });
+        })
+    }
+
     render() {
+        const {keyWord, resultsSearchNumber} = this.state
         return (
             <div className="App">
-                <Navbar />
+                <Navbar handelChange={this.handelChange} keyWord={keyWord} handelClick={this.handelClick} />
                 <div className="container">
                     <div className="filter">
-                        <h1>About 13,000,000 Filtred results</h1>
+                        <h1>About {resultsSearchNumber} Filter results</h1>
                         <h1>Filter</h1>
                     </div>
                 <hr />
